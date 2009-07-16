@@ -1,0 +1,118 @@
+# vim: set filetype=sh:
+function prompt_command() {
+    # ported to sanity by Sam Rowe 6/23/09
+    # originally by icetrey <trey@imagin.net> and modded later by others
+    EXITUS=$?
+    local n_Co=$(tput colors)
+    if [[ $n_Co == 256 ]]; then
+        THEME="\[\e[38;5;55m\]"
+        YELLOW="\[\e[38;5;208m\]"
+    else
+        THEME="\[\e[0;32m\]"
+        YELLOW="\[\e[0;33m\]"
+    fi
+
+    NORM="\[\e[0m\]"
+    BOLD="\[\e[1m\]"
+    UL="\[\e[4m\]"
+
+    GREEN="\[\e[0;32m\]"
+    CYAN="\[\e[0;36m\]"
+    GRAY="\[\e[0;30m\]"
+    RED="\[\e[0;31m\]"
+    BLUE="\[\e[0;34m\]"
+    MAG="\[\e[0;35m\]"
+    WHITE="\[\e[0;37m\]"
+
+    local AT="${GRAY}${BOLD}@${NORM}"
+    local SL="${GRAY}${BOLD}/${NORM}"
+    local CL="${GRAY}${BOLD}:${NORM}"
+    local DS="${GRAY}${BOLD}-${NORM}"
+    local BB="${THEME}[${NORM}"
+    local EB="${THEME}]${NORM}"
+    local BP="${BOLD}(${NORM}"
+    local EP="${BOLD})${NORM}"
+    local PROMPTCHAR="${BOLD}\\\$${NORM}"
+
+    RC=''
+    if [[ $EXITUS -ne 0 ]] ; then
+        RC=" ${RED}${BOLD}${EXITUS}${NORM} "
+    fi
+    local _maxlen=$((${COLUMNS:-80}/4))
+    local _path=$(dirs +0)
+    local _len=${#_path}
+    if [[ $_len -gt $_maxlen ]]; then
+        _path=".+${_path: -$_maxlen}"
+    fi
+    if [[ -O $PWD ]]; then
+        local DCOLOR=$GREEN
+    elif [[ -w $PWD ]]; then
+        local DCOLOR=$CYAN
+    else
+        local DCOLOR=$RED
+    fi
+    local _path="${DCOLOR}${_path}${NORM}"
+
+    local _gitrepos=''
+    local _ingit=''
+    # only do git stuff when you're in a registered git repo
+    if [[ -f "${HOME}/.gitrepos" ]]; then
+        local _gitrepos=$(cat "${HOME}/.gitrepos")
+    fi
+    for repo in $_gitrepos
+    do
+        if [[ "${PWD}/" == "${repo}"/* ]]; then
+            local _ingit=$(git symbolic-ref HEAD 2>/dev/null)
+            _ingit=${_ingit#refs/heads/}
+            _ingit="${YELLOW}${_ingit}${NORM}"
+            if current_git_status=$(git status | grep modified 2> /dev/null); then
+                _ingit="${_ingit} ☠ "
+            fi
+
+        fi
+    done
+
+    local USERL="${USER}${NORM}${AT}${WHITE}${HOSTNAME%%.*}"
+    if [[ -S "$SSH_AUTH_SOCK" ]]; then
+        local USERL="${UL}${USERL}"
+    fi
+    local INSCREEN=''
+    local XSCREEN=''
+    if [[ -n "${WINDOW}" ]]; then
+        local INSCREEN="${SL}${WHITE}s${BOLD}${WINDOW}${NORM}"
+        local XSCREEN=" s${WINDOW}"
+    fi
+    if [[ -n ${TMUX} ]]; then
+        local INSCREEN="${SL}${WHITE}T${BOLD}${WINDOW}${NORM}"
+    fi
+    local XTERMTITLE=''
+    if [[ "${TERM}" == "xterm" || "${TERM}" == "screen" || "${TERM}" == 'rxvt' ]] ; then
+        XTERMTITLE="\[\e]0;${USER}@${HOSTNAME%%.*}${XSCREEN}\007\]"
+    fi
+    if [[ "${USER}" == 'root' ]]; then
+        #local BB="${RED}[${NORM}"
+        #local EB="${RED}]${NORM}"
+        local PROMPTCHAR="${RED}\\\$${NORM}"
+        local USERL="${RED}${USERL}"
+    else
+        local USERL="${WHITE}${USERL}"
+    fi
+    local USERL="${BB}${USERL}${EB}"
+
+    local LOAD=''
+    local UCOUNT=''
+    local PROCCOUNT=''
+    if [[ "$__SAMOS" = "Linux" ]]; then
+        local UCOUNT="${SL}${WHITE}$(users | wc -w)"
+        local PROCCOUNT="${SL}${WHITE}$(cut -f1 -d\  /proc/loadavg)"
+        local LOAD="${SL}${WHITE}$(cut -f4 -d\  /proc/loadavg| cut -f2 -d/)"
+    fi
+    local OSSTUFF="${BB}${WHITE}\j${UCOUNT}${PROCCOUNT}${LOAD}${INSCREEN}${EB}"
+    local YOURSHELL="${BB}${WHITE}\!${SL}${WHITE}\#${SL}${WHITE}\l${EB}"
+    local TIMEDATE="${BB}${WHITE}\T \d${EB}"
+    local REALPROMPT="${BP}${RC}${_path}${CL}${_ingit} ${PROMPTCHAR}${EP} "
+    PS1="${XTERMTITLE}${USERL}${YOURSHELL}${TIMEDATE}${OSSTUFF}
+${REALPROMPT}"
+    export PS1
+}
+export PROMPT_COMMAND=prompt_command
