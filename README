@@ -13,3 +13,4 @@ Highlights:
 * prompt indicates if ssh-agent is available to this shell
 * prompt changes color when root
 * su'ing to root maintains history and $HOME etc.
+* screen windows are automatically named the short-hostname

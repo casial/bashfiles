@@ -38,6 +38,34 @@ if [[ "${__SAMOS}" = "Linux" ]] ; then
         mv "$@" $dir;
         ( cd $dir && rm -rf Packages.gz && dpkg-scanpackages . /dev/null >Packages && gzip Packages )
     }
+else
+
+    _storooni ()
+    {
+        local cur="${COMP_WORDS[COMP_CWORD]}"
+        local prev="${COMP_WORDS[COMP_CWORD-1]}"
+        local cmds="-h -n check listignores report stats"
+        local reportopts="-o -s -h -N"
+        local checkopts="-d -h"
+        local onlys="capacity errors hbas inqdevs metadbs metas vgs"
+        COMPREPLY=()
+        case $prev in
+            *-o*)
+                COMPREPLY=( $(compgen -W "${onlys}" -- ${cur}) )
+                ;;
+            check)
+                COMPREPLY=( $(compgen -W "${checkopts}" -- ${cur}) )
+                ;;
+            report)
+                COMPREPLY=( $(compgen -W "${reportopts}" -- ${cur}) )
+                ;;
+            storooni)
+                COMPREPLY=( $(compgen -W "${cmds}" -- ${cur}) )
+                ;;
+        esac
+    }
+    complete -F _storooni storooni
+
 fi
 function todot () { echo ${*%%.*}; };
 function @@ () { export whoneedspushd=$PWD; };
@@ -127,16 +155,8 @@ function .bpt () { cd ~/.bashprompt/bashthemes/${1} ; };
 function RCCT () { 
     if [[ -z "${2}" ]] ; then 
         ls $INITDIR;
-    elif [[ "${1}" = "Start" ]] ; then
-        cd / && $INITDIR/${2} start ; cd -;
-    elif [[ "${1}" = "Restart" ]] ; then
-        cd / && $INITDIR/${2} restart ; cd -;
-    elif [[ "${1}" = "Stop" ]] ; then
-        cd / && $INITDIR/${2} stop ; cd -;
-    elif [[ "${1}" = "Reload" ]] ; then
-        cd / && $INITDIR/${2} reload ; cd -;
     else
-        echo "Something bad happened.";
+        cd / && $INITDIR/${2} $1 ; cd -;
     fi
 }
 
@@ -147,11 +167,12 @@ function _myservices() {
     COMPREPLY=( $( compgen -W '${COMPREPLY[@]#@($INITDIR)/}' -- $cur) )
 }
 
-function Start () { RCCT ${FUNCNAME} ${*} ; };
-function Restart () { RCCT ${FUNCNAME} ${*} ; };
-function Reload () { RCCT ${FUNCNAME} ${*} ; };
-function Stop () { RCCT ${FUNCNAME} ${*} ; };
-complete -F _myservices Start Restart Reload Stop
+function start () { RCCT ${FUNCNAME} ${*} ; };
+function restart () { RCCT ${FUNCNAME} ${*} ; };
+function reload () { RCCT ${FUNCNAME} ${*} ; };
+function stop () { RCCT ${FUNCNAME} ${*} ; };
+function status () { RCCT ${FUNCNAME} ${*} ; };
+complete -F _myservices start restart reload stop status
 # End RC stuff
 
 function tree()
