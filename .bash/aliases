@@ -52,6 +52,7 @@ alias H='kill -HUP'
 have vim && alias vi='vim -X'
 #alias top10='history|awk '{a[$2]++ } END{for(i in a){print a[i] " " i}}'|sort -nr|head'
 alias ls='ls -F'
+[[ "${__SAMOS}" = "Darwin" ]] && alias ls='ls -FG'
 if [[ "${__SAMOS}" = "Linux" ]] ; then
     alias bdf='df -h'
     alias m='mplayer -vo xv -ao oss'
@@ -120,7 +121,6 @@ fi
 
 # Hosts
 alias slogin='ssh'
-alias henry='ssh sam@henry.tss.usg.edu'
 alias kumar='ssh sam@kumar'
 # WORK ACK!
 

@@ -210,12 +210,6 @@ function regit() {
     echo "${PWD}" >> ~/.gitrepos
 }
 
-function tss () {
-    local host
-    host=$1
-    shift
-    TERM=vt100 ssh tss@${host} $*;
-}
 function Attach(){
     grabssh
     if [[ -z "${1}" ]] ; then
@@ -274,4 +268,4 @@ check_screen () {
   #fi
 #} 
 
-shopt -u hostcomplete && complete -F _ssh ssh slogin sftp xhost autossh tss
+shopt -u hostcomplete && complete -F _ssh ssh slogin sftp xhost autossh

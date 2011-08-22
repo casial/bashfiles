@@ -14,7 +14,7 @@ export LESSKEY=$HOME/.lesskey
 export MANWIDTH=80
 export ACK_OPTIONS='--type-set puppet=.pp'
 #export HN=`expr "$HOSTNAME" : '\([^\.]*\)\.*'`
-export LOCALDOMAIN="bor.usg.edu view.usg.edu tss.usg.edu gabest.usg.edu gafirst.usg.edu rath.peachnet.edu"
+export LOCALDOMAIN="coraid.com"
 #I'm probably at work.
 : ${ATWORK:=1} ; export ATWORK
 
@@ -92,7 +92,7 @@ export INITDIR;
 
 #shopt -s dotglob
 
-[[ "${TERM}" == screen* ]] && echo -n -e '\ek'${HOSTNAME%%.*}'\e\'
+[[ "${__SAMOS}" != 'Darwin']] && [[ "${TERM}" == screen* ]] && echo -n -e '\ek'${HOSTNAME%%.*}'\e\'
 if [[ -S "${WINDOW}" ]]
 then
     [[ -f ${HOME}/bin/fixssh ]] && . ${HOME}/bin/fixssh
@@ -120,8 +120,6 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
-export SVN="https://svn.bor.usg.edu/tss"
-#export SRSVN="svn+ssh://www.samrowe.com/samrowesvn"
 [[ -f /etc/bash_completion/git ]] && . /etc/bash_completion/git
 
 # In case I ever get sick of bashprompt:
