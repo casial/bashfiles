@@ -92,7 +92,7 @@ export INITDIR;
 
 #shopt -s dotglob
 
-[[ "${__SAMOS}" != 'Darwin']] && [[ "${TERM}" == screen* ]] && echo -n -e '\ek'${HOSTNAME%%.*}'\e\'
+[[ "${__SAMOS}" != 'Darwin' ]] && [[ "${TERM}" == screen* ]] && echo -n -e '\ek'${HOSTNAME%%.*}'\e\'
 if [[ -S "${WINDOW}" ]]
 then
     [[ -f ${HOME}/bin/fixssh ]] && . ${HOME}/bin/fixssh
