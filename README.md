@@ -17,4 +17,4 @@ Highlights:
 * screen windows are automatically named the short-hostname
 * complete-able rc control aliases (start, stop, etc) with Lin/Sol/HP-UX support
 
-[Markdown sucks](https://raw.github.com/riddley/bashfiles/master/screenshot.png)
+(https://raw.github.com/riddley/bashfiles/master/screenshot.png)
