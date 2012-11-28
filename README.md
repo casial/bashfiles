@@ -13,7 +13,7 @@ If you're reading this, I'll bet you can guess what these files are.
 
 * prompt relies on a lot of Linux stuff, Mac OS users may have work to make it perfect
 * prompt gracefully degrades on non-Linux (well it used to... untested)
-* prompt Pathogen-ized (use a Pathogen-modified font)
+* prompt Powerline-ized (use a Pathogen-modified font)
 * prompt tells you what screen window you're in if you are
 * prompt tells you if you're in tmux (window info not available)
 * prompt tells you if you're in a writable directory
