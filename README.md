@@ -21,3 +21,6 @@ If you're reading this, I'll bet you can guess what these files are.
 * prompt color inicators for root user
 * git stuff in prompt only happens when you're in a "registered" git repo
 ![Prompt Screenshot](https://raw.github.com/riddley/bashfiles/master/screenshot.png)
+
+# To Do
+* merge in sciurus' better ssh/display fix for screen
