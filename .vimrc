@@ -12,6 +12,7 @@ set redraw
 if &term == 'xterm-color' || &term == 'screen-256color'
     set t_Co=256
 endif
+set autoread "stop telling me my chmod has changed the file?
 
 " fuzzyfindfiles with \t
 if v:version > 700
@@ -31,6 +32,9 @@ endif
 "set foldenable
 "set foldmethod=syntax
 "set foldlevel=999 " make it really high, so they're not displayed by default
+call pathogen#infect()
+let g:Powerline_symbols = 'fancy'
+
 
 " detect puppet filetype
 au BufRead,BufNewFile *.pp              set filetype=puppet
@@ -95,6 +99,7 @@ endif
 
 " Use UTF-8 as the default buffer encoding
 set enc=utf-8
+set encoding=utf-8
 
 " Jump to matching bracket for 2/10th of a second (works with showmatch)
 "set matchtime=2
@@ -146,13 +151,15 @@ if samos !~ 'HP-UX'
     "colorscheme fruity
     "colorscheme gardener
     "colorscheme inkpot
-    colorscheme xoria256
 endif
+colorscheme xoria256
+set background=dark
+" indent guides stuff
+let g:indent_guides_start_level=2
+let g:indent_guides_guide_size=1
+let g:indent_guides_enable_on_vim_startup=1
 ab _me  Sam Rowe
 ab _email sam@samrowe.com
-ab _riddley <riddley@unspeakable.net>
-ab _dead deadman@deadman.org>
-ab _web http://www.deadman.org
 ab _pre echo "<pre>\n";
 ab _Pre echo "</pre>\n";
 ab _var var_dump(
@@ -192,7 +199,7 @@ nmap <silent> S :let @x=@"<CR>"_diw"xP
 
 "map <F2> :call WebMe()<cr>
 map <F3> !} fmt -c -w 72<cr>
-map  !} fmt -c -w 72<cr>
+map  !} fmt -w 72<cr>
 "map <F4> {<CR>}<C-O>O
 "map <F3> gqap
 imap <F7>  <esc>:call ReplacePlaceHolder()<cr>a
@@ -225,7 +232,7 @@ au BufRead,BufNewFile *.pp              set filetype=puppet
 " Only do this part when compiled with support for autocommands
 if has("autocmd")
   " In text files, always limit the width of text to 78 characters
-  autocmd BufRead *.txt set tw=78
+  "autocmd BufRead *.txt set tw=78
   " When editing a file, always jump to the last cursor position
   "if &modifiable
   if argv(0) != 'less.sh' || &modifiable
