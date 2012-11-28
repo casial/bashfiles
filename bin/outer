@@ -6,4 +6,4 @@ cat ~/.screenrc > $outerfile
 echo 'escape ""' >> $outerfile
 echo 'bindkey -k F2 command' >> $outerfile
 echo 'bindkey -k F1 windowlist -m' >> $outerfile
-screen -c $outerfile
+screen -S outer -U -c $outerfile
