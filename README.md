@@ -23,4 +23,4 @@ If you're reading this, I'll bet you can guess what these files are.
 ![Prompt Screenshot](https://raw.github.com/riddley/bashfiles/master/screenshot.png)
 
 # To Do
-* merge in sciurus' better ssh/display fix for screen
+* merge in sciurus' [better ssh/display fix for screen](https://github.com/sciurus/splatbang/blob/master/rescreen)
