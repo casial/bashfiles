@@ -100,7 +100,12 @@ function su () {
     fi
     #append recent history to the history file
     history -a
-    /bin/su ${SUUSER} -c "env USER=${SUUSER} HOME=${HOME} ${SHELL}; [ -f ${HOME}/.ICEauthority ] && chown $ORIGU:$ORIGG ${HOME}/.ICEauthority ${HOME}/.viminfo"
+    if [[ "${__SAMOS}" = "Linux" ]] ; then
+        /bin/su -m
+    else
+        /bin/su ${SUUSER} -c "env USER=${SUUSER} HOME=${HOME} ${SHELL}; [ -f ${HOME}/.ICEauthority ] && chown $ORIGU:$ORIGG ${HOME}/.ICEauthority ${HOME}/.viminfo"
+    fi
+    #/bin/su ${SUUSER} -m "env USER=${SUUSER} HOME=${HOME} ${SHELL}; [ -f ${HOME}/.ICEauthority ] && chown $ORIGU:$ORIGG ${HOME}/.ICEauthority ${HOME}/.viminfo"
     # Clear the history list by deleting all the entries.
     #history -c
     # Read the contents of the history file and use them as the current history.
@@ -208,6 +213,14 @@ function explain () {
 
 function regit() {
     echo "${PWD}" >> ~/.gitrepos
+}
+
+# removes _exactly what you type_ from ~/.ssh/known_hosts (meaning 'grapes' gets you the key for 'grapes' vs 'grapes.rath.peachnet.edu')
+function forget() {
+    local ho=${1#*@}
+    ssh-keygen -R ${ho}
+    local ip=$(host ${ho} | awk '{print $4}')
+    ssh-keygen -R ${ip}
 }
 
 function Attach(){
