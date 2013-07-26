@@ -1,7 +1,7 @@
 # vim: set filetype=sh:
 # Grab the Powerline fonts from github. Search google for 'powerline vim'
 function explain () {
-    echo "User@Host> Hist#/Cmd#/TTY> HH:MM:SS Day Mnth Date> Jobs/#Users/1mLoadAvg/#Proc>"
+    echo "User@Host> Hist#/Cmd#/Batt%||TTY> HH:MM:SS Day Mnth Date> Jobs/#Users/1mLoadAvg/#Proc>"
     echo "If there's an 's' after the #ofProc, you're in screen."
     echo "If the username is underlined, you have access to an SSH Agent."
     echo "If the username is red, you're root."
@@ -194,9 +194,15 @@ function prompt_command() {
         local UCOUNT="${SL}${WHITE}$(users | wc -w)"
         local LOAD="${SL}${WHITE}$(cut -f1 -d\  /proc/loadavg)"
         local PROCCOUNT="${SL}${WHITE}$(cut -f4 -d\  /proc/loadavg| cut -f2 -d/)"
+        local BATT='\l'
+        if type acpi > /dev/null 2>&1 ; then
+            BATT=$(acpi --battery)
+            BATT=${BATT#*, }
+            BATT=${BATT%,*}
+        fi
     fi
     local OSSTUFF="${LGRAYBG}${WHITE} \j${UCOUNT}${LOAD}${PROCCOUNT}${INSCREEN} ${ELG}"
-    local YOURSHELL="${LGRAYBG}${WHITE} \!${SL}${WHITE}\#${SL}${WHITE}\l ${LGKE}"
+    local YOURSHELL="${LGRAYBG}${WHITE} \!${SL}${WHITE}\#${SL}${WHITE}${BATT} ${LGKE}"
     local TIMEDATE="${BG}${WHITE} \T \d ${GKM}"
     local REALPROMPT="${BG}${RC}${_path}${BG}${_ingit} ${PROMPTCHAR}${EC} "
     PS1="${XTERMTITLE}${USERL}${YOURSHELL}${TIMEDATE}${OSSTUFF}
