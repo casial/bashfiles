@@ -1,4 +1,11 @@
 # vim: set filetype=sh:
+function dumbterminal (){
+    unset PS2 PROMPT_COMMAND
+    export PS1='$ '
+}
+function nofont (){
+    export NOFONT="nofont"
+}
 # Grab the Powerline fonts from github. Search google for 'powerline vim'
 function explain () {
     echo "User@Host> Hist#/Cmd#/Batt%||TTY> HH:MM:SS Day Mnth Date> Jobs/#Users/1mLoadAvg/#Proc>"
@@ -64,10 +71,18 @@ function prompt_command() {
     BG="\[\e[48;5;235m\]"
 
     local AT="${GRAT}@"
-    local THIN='⮁'
-    local THICK='⮀'
-    local UNTHICK='⮂'
-    local UNTHIN='⮃'
+    if [[ -z $NOFONT ]]; then
+        local THIN='⮁'
+        local THICK='⮀'
+        local UNTHICK='⮂'
+        local UNTHIN='⮃'
+    else
+        local THIN='>'
+        local THICK='>'
+        local UNTHICK='<'
+        local UNTHIN='<'
+    fi
+
     local SL="${BLACK}${BOLD}${THIN}${UNBOLD} "
     local BNE="${BLACKBG}${BLACK} ${THIN}"
     local ELG="${BLACKBG}${LGRAY}${THICK}"
@@ -196,7 +211,7 @@ function prompt_command() {
         local PROCCOUNT="${SL}${WHITE}$(cut -f4 -d\  /proc/loadavg| cut -f2 -d/)"
         local BATT='\l'
         if type acpi > /dev/null 2>&1 ; then
-            BATT=$(acpi --battery)
+            BATT=$(acpi --battery 2> /dev/null)
             BATT=${BATT#*, }
             BATT=${BATT%,*}
         fi
