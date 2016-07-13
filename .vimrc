@@ -1,94 +1,156 @@
-let samos=system('uname -s')
+call plug#begin('~/vim.plugged')
+Plug 'benjifisher/matchit.zip'
+Plug 'bling/vim-airline'
+Plug 'cakebaker/scss-syntax.vim'
+Plug 'chikamichi/mediawiki.vim'
+Plug 'chriskempson/tomorrow-theme'
+Plug 'elixir-lang/vim-elixir'
+Plug 'ervandew/supertab'
+Plug 'fcpg/vim-whiplash'
+Plug 'freeo/vim-kalisi'
+Plug 'gcavallanti/vim-noscrollbar'
+Plug 'gosukiwi/vim-atom-dark'
+Plug 'joshdick/onedark.vim'
+Plug 'junegunn/seoul256.vim'
+Plug 'KabbAmine/yowish.vim'
+Plug 'Lokaltog/vim-distinguished'
+Plug 'mbbill/undotree'
+Plug 'morhetz/gruvbox'
+Plug 'mtglsk/mushroom'
+Plug 'nathanaelkane/vim-indent-guides'
+Plug 'nanotech/jellybeans.vim'
+Plug 'octol/vombatidae-vim'
+Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/syntastic'
+Plug 'sjl/badwolf'
+Plug 'slim-template/vim-slim'
+Plug 't9md/vim-ruby-xmpfilter'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-vividchalk'
+Plug 'unblevable/quick-scope'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'vim-ruby/vim-ruby'
+Plug 'vim-scripts/SeeTab'
+Plug 'w0ng/vim-hybrid'
+Plug 'wellsjo/wells-colorscheme.vim'
+call plug#end()
 set tabstop=8
 "tab width
 set softtabstop=4
 "for viewing
 set shiftwidth=4
-" for >>  and <<  
+" for >>  and <<
 set expandtab
 set redraw
 "set tw=79
 "256 color support
-if &term == 'xterm-color' || &term == 'screen-256color'
+if &term == 'xterm-color' || &term == 'screen-256color' || &term == 'xterm-256color'
     set t_Co=256
 endif
 set autoread "stop telling me my chmod has changed the file?
-
-" fuzzyfindfiles with \t
-if v:version > 700
-    map <leader>t :FuzzyFinderTextMate<CR>
-    let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;.git/**;"
-    " display relative path, instead of abbrevated path (lib/jeweler.rb vs l/jeweler.rb)
-    "let g:fuzzy_path_display = 'relative_path'
-
-    map <leader>d :NERDTreeToggle<CR>
-    " quit NERDTree after openning a file
-    let NERDChristmasTree=1
-    let NERDTreeQuitOnOpen=1
-    let NERDTreeIgnore=['\.git','\.svn']
-endif
-
-" as nice as this would be, it makes vim DOG slow
-"set foldenable
-"set foldmethod=syntax
-"set foldlevel=999 " make it really high, so they're not displayed by default
-call pathogen#infect()
-let g:Powerline_symbols = 'fancy'
-
-
-" detect puppet filetype
-au BufRead,BufNewFile *.pp              set filetype=puppet
-
-set nocompatible	" Use Vim defaults (much better!)
 set bs=2		" allow backspacing over everything in insert mode
 set ai			" always set autoindenting on
 set backup		" keep a backup file
 set backupdir=$HOME/tmp   " directory of backup files
-set viminfo='20,\"50	" read/write a .viminfo file, don't store more
-			" than 50 lines of registers
-set history=100		" keep 50 lines of command line history
+set viminfo='20,\"50,:50	" read/write a .viminfo file, don't store more
+                        " than 50 lines of registers
+set history=1000	" keep 50 lines of command line history
 set wildmenu
 " Set command-line completion mode:
 "   - on first <Tab>, when more than one match, list all matches and complete
 "     the longest common  string
 "   - on second <Tab>, complete the next full match and show menu
 set wildmode=list:longest,full
+" Use UTF-8 as the default buffer encoding
+set enc=utf-8
+set encoding=utf-8
 
-" Generic highlight changes
-highlight Comment cterm=none ctermfg=Gray
-highlight IncSearch cterm=none ctermfg=Black ctermbg=DarkYellow
-highlight Search cterm=none ctermfg=Black ctermbg=DarkYellow
-highlight String cterm=none ctermfg=DarkGreen
-highlight treeDir cterm=none ctermfg=Cyan
-highlight treeUp cterm=none ctermfg=DarkYellow
-highlight treeCWD cterm=none ctermfg=DarkYellow
-highlight netrwDir cterm=none ctermfg=Cyan
+" as nice as this would be, it makes vim DOG slow
+"set foldenable
+"set foldmethod=syntax
+"set foldlevel=999 " make it really high, so they're not displayed by default
+"colorscheme xoria256
+"colorscheme badwolf
+"colorscheme seoul256
+set background=dark
+"colorscheme gruvbox
+"colorscheme vombatidae
+colorscheme jellybeans
 
+let g:indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
+
+set laststatus=2
+let g:airline_powerline_fonts = 0
+let g:airline_detect_paste=1
+let g:airline_detect_modified=1
+let g:airline#syntastic#enabled  = 1
+let g:airline_detect_modified=1
+
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+let g:airline_left_sep = '⮀'
+let g:airline_left_alt_sep = '⮁'
+let g:airline_right_sep = '⮂'
+let g:airline_right_alt_sep = '⮃'
+let g:airline_symbols.branch = '⭠'
+let g:airline_symbols.crypt = '🔒'
+let g:airline_symbols.linenr = '⭡'
+
+" Trigger a highlight in the appropriate direction when pressing these keys:
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
+function! Noscrollbar(...)
+    let w:airline_section_z = '%{noscrollbar#statusline(20,'' '',''█'',[''▐''],[''▌''])}'
+    "let w:airline_section_z = '%{noscrollbar#statusline()}'
+endfunction
+call airline#add_statusline_func('Noscrollbar')
+"let w:airline_section_z = '%{noscrollbar#statusline(20,'' '',''█'',[''▐''],[''▌''])}'
+"let w:airline_section_z = '%{noscrollbar#statusline(9,''■'',''◫'',[''◧''],[''◨''])}'
+
+"ctrlspace stuff
+let g:airline_exclude_preview = 1
+
+"xmpfilter stuff
+autocmd FileType ruby nmap <buffer> <F3> <Plug>(xmpfilter-mark)
+autocmd FileType ruby xmap <buffer> <F3> <Plug>(xmpfilter-mark)
+autocmd FileType ruby imap <buffer> <F3> <Plug>(xmpfilter-mark)
+
+autocmd FileType ruby nmap <buffer> <F4> <Plug>(xmpfilter-run)
+autocmd FileType ruby xmap <buffer> <F4> <Plug>(xmpfilter-run)
+autocmd FileType ruby imap <buffer> <F4> <Plug>(xmpfilter-run)
+
+" detect puppet filetype
+"au BufRead,BufNewFile *.pp              set filetype=puppet
+
+let g:syntastic_error_symbol='✗'
+let g:syntastic_warning_symbol='⚠'
+
+
+" For UndoTree
+if has("persistent_undo")
+    set undodir=~/tmp/
+    set undofile
+endif
 
 " show tabs and trailing whitespace visually
-set list listchars=tab:>-,trail:.,extends:>
-"set ruler		" show the cursor position all the time
-"set rulerformat=%55(%{VimBuddy()}%{strftime('%a\ %b\ %e\ %I:%M\ %p')}\ %5l,%-6(%c%V%)\ %P%)
-"set statusline=%55(%{VimBuddy()}%{strftime('%a\ %b\ %e\ %I:%M\ %p')}\ %5l,%-6(%c%V%)\ %P%)
-"set rulerformat=%55(%{strftime('%a\ %b\ %e\ %I:%M\ %p')}\ %5l,%-6(%c%V%)\ %P%)
-
-" copied from http://dev.gentoo.org/~ciaranm/configs/vimrc.html
-set laststatus=2
-fun! <SID>SetStatusLine()
-    let l:s1="%-3.3n\\ %f\\ %h%m%r%w"
-    "let l:s2="[%{&filetype?&filetype:'none'},%{&encoding},%{&fileformat}]"
-    "let l:s2="[%Y,%{&fileformat}]\\ %{VimBuddy()}"
-    let l:s2="[%Y,%{&fileformat}]\\ "
-    let l:s3="%=\\ 0x%-8B\\ \\ %-14.(%l,%c%V%)\\ %<%P"
-    execute "set statusline=" . l:s1 . l:s2 . l:s3
-endfun
-call <SID>SetStatusLine()
-" end copy
+"set list listchars=tab:>-,trail:.,extends:>
+set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮,trail:⌴
+set showbreak=↪
+set title
 
 " Enable loading filetype and indentation plugins
 filetype plugin on
 filetype indent on
 if v:version > 700
+    map <leader>d :NERDTreeToggle<CR>
+    " quit NERDTree after openning a file
+    let NERDChristmasTree=1
+    let NERDTreeQuitOnOpen=1
+    let NERDTreeIgnore=['\.git','\.svn']
     " Insert mode completion options
     set completeopt=menu,longest,preview
     " use CTRL-F for omni completion
@@ -96,20 +158,6 @@ if v:version > 700
     "set spell
     "let spell_auto_type = "mail"
 endif
-
-" Use UTF-8 as the default buffer encoding
-set enc=utf-8
-set encoding=utf-8
-
-" Jump to matching bracket for 2/10th of a second (works with showmatch)
-"set matchtime=2
-
-" don't forget :TOhtml
-" Settings for :TOhtml
-let html_number_lines=1
-let html_use_css=1
-let use_xhtml=1
-"let loaded_netrw = 1
 
 " If we're in a wide window, enable line numbers.
 fun! <SID>WindowWidth()
@@ -147,26 +195,46 @@ nnoremap <silent> <F9> :Tlist<CR>
 " Project.vim settings
 let g:proj_window_width=10
 
-if samos !~ 'HP-UX'
-    "colorscheme fruity
-    "colorscheme gardener
-    "colorscheme inkpot
-endif
-colorscheme xoria256
-set background=dark
+
 " indent guides stuff
 let g:indent_guides_start_level=2
 let g:indent_guides_guide_size=1
 let g:indent_guides_enable_on_vim_startup=1
-ab _me  Sam Rowe
-ab _email sam@samrowe.com
-ab _pre echo "<pre>\n";
-ab _Pre echo "</pre>\n";
-ab _var var_dump(
-ab _dg debug_grab( 
-ab _ed debugend();
-ab _de debugend();
-ab _head header("Content-Type: text/plain");
+
+iabbrev _sf support@1r46vcjt0wvvysdxj4ysri0k6.in.salesforce.com
+iabbrev _hh 
+\I hope you find this information helpful. Please let me know if you have any additional questions or if I can be of further assistance.
+\<CR>
+\<CR>Thanks,
+\<CR>Sam Rowe
+iabbrev _ty 
+\Thanks,
+\<CR>Sam Rowe
+iabbrev _output Thanks for sending that output, it was very helpful.
+iabbrev _copy Please always copy support@coraid.com to ensure a prompt reply in the event that I'm unavailable and to ensure that your emails are archived in your support ticket.
+iabbrev _me  Sam Rowe
+iabbrev _cdu http://support.coraid.com/support/quickstart/usingCoraid-diags.html
+iabbrev _email sam@samrowe.com
+iabbrev ldis ಠ_ಠ
+"ab _pre echo "<pre>\n";
+"ab _Pre echo "</pre>\n";
+"ab _var var_dump(
+"ab _dg debug_grab( 
+"ab _ed debugend();
+"ab _de debugend();
+"ab _head header("Content-Type: text/plain");
+iabbrev _webex https://nimblestorage.webex.com/meet/Sam.Rowenimblestorage.com
+
+noremap  <F1> :checktime<cr>
+inoremap <F1> <esc>:checktime<cr>
+" Use sane regexes.
+nnoremap / /\v
+vnoremap / /\v
+" Keep search matches in the middle of the window.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+
 " ,E : Execute current line.
 map ,E 0/\$<CR>w"yy$:<C-R>y<C-A>r!<C-E>
 " Edit my .vimrc file.
@@ -180,8 +248,6 @@ imap <C-Space> <esc>
 imap jj <esc>
 imap <F1> <esc>
 
-
-
 " Smoother changes
 set ttyfast
 "Show uncompleted command
@@ -192,13 +258,12 @@ set showcmd
 "set showmode
 :let loaded_matchparen = 1
 
-
 nmap :WQ :wq
 " map S to replace the current word with a previously yanked one
 nmap <silent> S :let @x=@"<CR>"_diw"xP
 
 "map <F2> :call WebMe()<cr>
-map <F3> !} fmt -c -w 72<cr>
+"map <F3> !} fmt -c -w 72<cr>
 map  !} fmt -w 72<cr>
 "map <F4> {<CR>}<C-O>O
 "map <F3> gqap
@@ -227,7 +292,7 @@ noremap <C-K> <C-W>k<C-W>_
 "inoremap <silent> <S-Tab> <C-r>=<SID>InsertTabWrapper(-1)<CR>
 
 " detect puppet filetype
-au BufRead,BufNewFile *.pp              set filetype=puppet
+"au BufRead,BufNewFile *.pp              set filetype=puppet
 
 " Only do this part when compiled with support for autocommands
 if has("autocmd")
@@ -239,6 +304,8 @@ if has("autocmd")
       "autocmd BufReadPost * if line("'\"") | exe "'\"" | endif
       au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif 
   endif
+  au FileType gitcommit startinsert
+  au Filetype gitcommit setlocal spell textwidth=72
 endif
 
 " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
@@ -251,6 +318,8 @@ map Q gq
 " Also switch on highlighting the last used search pattern.
 if &t_Co > 2 || has("gui_running")
   syntax on
+  " Don't try to highlight lines longer than 800 characters.
+  set synmaxcol=800
   set hlsearch
 endif
 
@@ -273,18 +342,31 @@ if has("autocmd")
     augroup content
         autocmd!
 
-        autocmd BufNewFile *.rb 0put ='# vim: set sw=4 sts=4 et tw=0 :' |
-                    \ 0put ='#!/usr/bin/ruby' | set sw=4 sts=4 et tw=0 |
-                    \ norm G
+"        autocmd BufNewFile *.rb 0put ='# vim: set sw=4 sts=4 et tw=0 :' |
+"                    \ 0put ='#!/usr/bin/ruby' | set sw=4 sts=4 et tw=0 |
+"                    \ norm G
         autocmd BufNewFile *.sh 0put ='# vim: set sw=4 sts=4 et tw=0 :' |
                     \ 0put ='#!/bin/sh' | set sw=4 sts=4 et tw=0 |
                     \ norm G
-        autocmd BufNewFile *.php 0put ='# vim: set sw=4 sts=4 et tw=0 :' |
-                    \ 0put ='<?php' | set sw=4 sts=4 et tw=0 |
-                    \ norm G
+"        autocmd BufNewFile *.php 0put ='# vim: set sw=4 sts=4 et tw=0 :' |
+"                    \ 0put ='<?php' | set sw=4 sts=4 et tw=0 |
+"                    \ norm G
     augroup END
 endif
 
+" Disable the damned mousewheel
+:nmap <ScrollWheelUp> <nop>
+:nmap <S-ScrollWheelUp> <nop>
+:nmap <C-ScrollWheelUp> <nop>
+:nmap <ScrollWheelDown> <nop>
+:nmap <S-ScrollWheelDown> <nop>
+:nmap <C-ScrollWheelDown> <nop>
+:nmap <ScrollWheelLeft> <nop>
+:nmap <S-ScrollWheelLeft> <nop>
+:nmap <C-ScrollWheelLeft> <nop>
+:nmap <ScrollWheelRight> <nop>
+:nmap <S-ScrollWheelRight> <nop>
+:nmap <C-ScrollWheelRight> <nop>
 
 
 " ===================================================================
@@ -350,4 +432,4 @@ endif
 " | 70  p | 71  q | 72  r | 73  s | 74  t | 75  u | 76  v | 77  w |
 " | 78  x | 79  y | 7a  z | 7b  { | 7c  | | 7d  } | 7e  ~ | 7f del|
 " ===================================================================
-noh
+"noh
